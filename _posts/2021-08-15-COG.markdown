@@ -1,10 +1,10 @@
 ---
-title: " Optimal Execution via Reinforcement Learning"
+title: "COG: Learning Skills That Generalize via Offline RL"
 layout: post
-date: 2021-05-23 22:10
-tag: 
-- Market Microstructure
-- Reinforcement Learning
+date: 2021-09-04 22:10
+tag:
+  - Market Microstructure
+  - Reinforcement Learning
 projects: true
 hidden: true # don't count this post in blog pagination
 description: "Using Almgren and Chriss Model via reinforcement learning"
@@ -12,7 +12,3 @@ category: project
 author: joseongmin
 externalLink: false
 ---
-
-
-
-

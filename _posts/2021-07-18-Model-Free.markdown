@@ -6,19 +6,18 @@ image: /assets/images/[Markdowm Image.jpg
 headerImage: false
 use_math: true
 tag:
-- Reinforcement Learning
+  - Reinforcement Learning
 star: false
 category: blog
 author: joseongmin
 description: Model-Free Offline Reinforment Learning
 ---
 
-# BCQ: Off-Policy Deep Reinforcement Learning without Exploration [1]
+# BCQ: Off-Policy Deep Reinforcement Learning without Exploration
 
+[BCQ.pdf](https://github.com/seongmin-Jo/seongmin-Jo.github.io/files/7025597/BCQ.pdf)
 
-
-
-
+[BEAR, BRAC.pdf](https://github.com/seongmin-Jo/seongmin-Jo.github.io/files/7025598/BEAR.BRAC.pdf)
 
 ### Refernece
 
