@@ -1,0 +1,25 @@
+---
+title: "10-K/Q NLP Project"
+layout: post
+date: 2021-03-01 22:10
+tag: finance
+projects: true
+hidden: true # don't count this post in blog pagination
+description: "Find Alpha by apping NLP at 10-K/Q"
+category: project
+author: joseongmin
+externalLink: false
+---
+
+# What has inside?
+
+- Craling 10-K/Q filings from SEC Edgar
+- preprocessing filling data
+- Appling NLP techniques (dictionary approach with Loughran and Mcdonald wordlists and TF-IDF*/Cosine similarity) on MD&A* sector to extract sentiment score
+- Examined correlation and cointegration between sentiment score and ETF of KOSPI 200 categorized by same GISC sector to predict Korean stock market using sentiment of 10-K/Q
+
+
+---
+
+[Check it out](https://github.com/seongmin-Jo/10-K-Q-NLP) here.
+If you need some help, just [tell me](https://github.com/seongmin-Jo/10-K-Q-NLP/issues).

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-08-21T21:26:56+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Jo Seongmin</title><subtitle>A blog about Reinforcemet Learning, Market Microstructure and Mathematics</subtitle><entry><title type="html">Introduction of Offline Reinfoecement Learning</title><link href="http://localhost:4000/offlineRL-Intro/" rel="alternate" type="text/html" title="Introduction of Offline Reinfoecement Learning" /><published>2021-06-21T22:44:00+09:00</published><updated>2021-06-21T22:44:00+09:00</updated><id>http://localhost:4000/offlineRL-Intro</id><content type="html" xml:base="http://localhost:4000/offlineRL-Intro/">&lt;h1 id=&quot;what-is-offlinebatched-reinforcement-learning&quot;&gt;What is Offline(Batched) reinforcement learning&lt;/h1&gt;
+
+&lt;p&gt;&lt;strong&gt;Definition 1.1&lt;/strong&gt; Offline reinforcement learning means RL algorithms that utilize previously collected data &lt;em&gt;D&lt;/em&gt;, without additional online data collection &lt;a href=&quot;https://arxiv.org/pdf/2005.01643.pdf&quot;&gt;1&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://user-images.githubusercontent.com/76901622/130313887-5e7f1d37-062e-4104-a89d-0fcc71066a34.jpg&quot; alt=&quot;offline_frame&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;why-offline-rl&quot;&gt;Why Offline RL&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;Compared to supervised learning, Online RL utilizes a feedback loop based on trial and error that requires interaction during learning. &lt;a href=&quot;https://papers.nips.cc/paper/2020/hash/f7efa4f864ae9b88d43527f4b14f750f-Abstract.html&quot;&gt;2&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;In many settings, this sort of online interaction is impractical, either because data collection is expensive and dangerous (e.g. autonomous driving, or healthcare)&lt;a href=&quot;https://proceedings.neurips.cc/paper/2020/file/0d2b2061826a5df3221116a5085a6052-Paper.pdf&quot;&gt;4&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Furthermore, even in domains where online interaction is feasible, weight still prefer to utilize previously collected data instead (e.g. if the domain is complex and effective generalization requires large datasets.)&lt;a href=&quot;https://arxiv.org/abs/2102.08363&quot;&gt;5&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;example-senario-in-optimal-exectution-agent&quot;&gt;Example Senario in Optimal Exectution Agent&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;Limits of making simulator&lt;/strong&gt; Order execution can be viewed as interactive sequential decision making problem. However, since the goal of Optimal Execution Algorithm is to interact successfully with real humans (in market), collecting trials requires interacting in market, which may be prohibitively expensive at the scale needed to train effective execution agents. So &lt;strong&gt;the RL Agent needs simulator to train agents&lt;/strong&gt;, but it has lots limits. However, offline data collected directly from past execution in real market can replace simulator &lt;a href=&quot;https://arxiv.org/abs/1812.06600&quot;&gt;6&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Decision Making in execution&lt;/strong&gt; Conventional active reinforcement learning may be prohibitively dangerous in market - even utilizing a fully trained policy to execute. Therefore, offline RL might be the viable path to apply reinforcement learning in such settings. Offline data would then be obtained from past execution or select “actions” from historical data.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Generalization of execution policy&lt;/strong&gt; There is many stocks of diverse prices in market. Therefore, we want to learn policies for a variety of stocks. ( e.g. the agent who orders Samsung Electronics well should also order LG Electronics well.) In that case, each skill by itself might require a very large amount of interaction, as we would need to collect enough data to earn the skill which generalizes effectively to all the situations (e.g. all the different stocks) in which the agent might need to perform it. With offline RL, we could instead imagine including all of the data the agent has ever collected for all of its previously learned skills in the data buffer for each new skill that it learns. In this way, offline RL can effectively utilize multi-task data.&lt;/p&gt;
+
+&lt;h1 id=&quot;challenges-of-offline-rl&quot;&gt;Challenges of Offline RL&lt;/h1&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;Offline RL relies entirely on the static dataset &lt;em&gt;D&lt;/em&gt;, without exploration : nothing to address this challenge [&lt;a href=&quot;https://arxiv.org/pdf/2005.01643.pdf&quot;&gt;1&lt;/a&gt;]&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Offline RL makes challenge when making and answer Counterfactual queries : to learn a policy that something differently from the pattern of behavior observed in the dataset &lt;em&gt;D&lt;/em&gt; : forgo the goal of finding the optimal policy, and instead aim to find the best possible policy using the fixed offline dataset [&lt;a href=&quot;https://arxiv.org/pdf/2005.01643.pdf&quot;&gt;1&lt;/a&gt;]&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Recent studies have observed that direct use of RL algorithms originally developed for the online or interactive paradigm leads to poor results in the offline RL setting&lt;/p&gt;
+
+    &lt;ul&gt;
+      &lt;li&gt;&lt;strong&gt;Distribution shift issue&lt;/strong&gt; : function approximator (policy, value function, model) trained one distribution should be evaluated on a &lt;strong&gt;different distribution&lt;/strong&gt; without further interaction&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h1 id=&quot;how-to-address-distribution-shift-issue-currently&quot;&gt;How to address distribution shift issue currently&lt;/h1&gt;
+
+&lt;h2 id=&quot;paradigm-in-model-free&quot;&gt;Paradigm in Model free&lt;/h2&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;Model-free approach is fail in the offline RL setting, due to large extrapolation error when the Q-function is evaluated on &lt;strong&gt;out-of-distribution actions (distribution shift)&lt;/strong&gt;, which can lead to unstable learning and divergence &lt;a href=&quot;https://arxiv.org/pdf/2005.01643.pdf&quot;&gt;1&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Constraining the learned policy to the behavior policy induced by the dataset to overcome this &lt;a href=&quot;https://proceedings.neurips.cc/paper/2020/file/0d2b2061826a5df3221116a5085a6052-Paper.pdf&quot;&gt;4&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;This method is limited to behaviors within the data manifold and make difficult to generalize &lt;a href=&quot;https://arxiv.org/pdf/2005.01643.pdf&quot;&gt;1&lt;/a&gt;, &lt;a href=&quot;https://arxiv.org/abs/2102.08363&quot;&gt;5&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;paradigm-in-model-based&quot;&gt;Paradigm in Model based&lt;/h2&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;Model-based approach is fail in the offline RL setting, due to distribution shift and model-bias &lt;a href=&quot;https://proceedings.neurips.cc/paper/2020/hash/a322852ce0df73e204b7e67cbbef0d0a-Abstract.html&quot;&gt;3&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Model error on out-of-distribution states that often drives exploration and corrective feedback in the online setting can be detrimental when interaction is not allowed in offline setting &lt;a href=&quot;https://proceedings.neurips.cc/paper/2020/hash/a322852ce0df73e204b7e67cbbef0d0a-Abstract.html&quot;&gt;3&lt;/a&gt;, &lt;a href=&quot;https://arxiv.org/abs/2102.08363&quot;&gt;5&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Using uncertainty quantification to overcome them ( MOReL, MOPO ) &lt;a href=&quot;https://proceedings.neurips.cc/paper/2020/hash/a322852ce0df73e204b7e67cbbef0d0a-Abstract.html&quot;&gt;3&lt;/a&gt;, &lt;a href=&quot;https://arxiv.org/abs/2102.08363&quot;&gt;5&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;refernece&quot;&gt;Refernece&lt;/h3&gt;
+&lt;p&gt;&lt;a href=&quot;https://arxiv.org/pdf/2005.01643.pdf&quot;&gt;1&lt;/a&gt; A. Kumar. Offline Reinforcement Learning: Tutorial, Review, and Perspectives on Open Problems. 2020.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://papers.nips.cc/paper/2020/hash/f7efa4f864ae9b88d43527f4b14f750f-Abstract.html&quot;&gt;2&lt;/a&gt; R. Kidambi. MOReL: Model-based Offline Reinforcement Learning. 2020.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://proceedings.neurips.cc/paper/2020/hash/a322852ce0df73e204b7e67cbbef0d0a-Abstract.html&quot;&gt;3&lt;/a&gt; T. Yu. MOPO: Model-based Offline Policy Optimization. 2020.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://proceedings.neurips.cc/paper/2020/file/0d2b2061826a5df3221116a5085a6052-Paper.pdf&quot;&gt;4&lt;/a&gt; A. Kumar. Conservative Q-Learning for Offline Reinforcement Learning. 2020.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://arxiv.org/abs/2102.08363&quot;&gt;5&lt;/a&gt; T. Yu. COMBO: Conservative Offline Model-Based Policy Optimization. 2021.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://arxiv.org/abs/1812.06600&quot;&gt;6&lt;/a&gt; B. Ning. Double Deep Q-Learning for Optimal Execution&lt;/p&gt;</content><author><name>joseongmin</name></author><category term="blog" /><category term="Reinforcement Learning" /><summary type="html">What is Offline(Batched) reinforcement learning</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:4000/assets/images/%5BMarkdowm%20Image.jpg" /><media:content medium="image" url="http://localhost:4000/assets/images/%5BMarkdowm%20Image.jpg" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">Optimal Execution via Reinforcement Learning</title><link href="http://localhost:4000/Optimal-Execution/" rel="alternate" type="text/html" title="Optimal Execution via Reinforcement Learning" /><published>2021-05-23T22:10:00+09:00</published><updated>2021-05-23T22:10:00+09:00</updated><id>http://localhost:4000/Optimal-Execution</id><content type="html" xml:base="http://localhost:4000/Optimal-Execution/">&lt;p&gt;&lt;img width=&quot;856&quot; alt=&quot;ddd&quot; src=&quot;https://user-images.githubusercontent.com/76901622/130319568-e4d41da6-6bcf-4877-a8a0-4dac33502a87.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img width=&quot;1084&quot; alt=&quot;ddddd&quot; src=&quot;https://user-images.githubusercontent.com/76901622/130319791-ce0aae40-2208-4c95-bb89-a8898954384b.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img width=&quot;1052&quot; alt=&quot;dddddddd&quot; src=&quot;https://user-images.githubusercontent.com/76901622/130319809-6799546d-5cce-4303-a862-331c3032d00a.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img width=&quot;1070&quot; alt=&quot;d&quot; src=&quot;https://user-images.githubusercontent.com/76901622/130319830-a2be6a18-d3dc-4a1f-bb17-9052663e5458.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img width=&quot;1074&quot; alt=&quot;asdf&quot; src=&quot;https://user-images.githubusercontent.com/76901622/130319843-bae9a2a7-7432-42c1-989c-f16ad32ba9a9.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img width=&quot;1054&quot; alt=&quot;asdfasgdf&quot; src=&quot;https://user-images.githubusercontent.com/76901622/130319861-028aef35-c088-401e-b52e-3246c341c354.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img width=&quot;1054&quot; alt=&quot;adhf&quot; src=&quot;https://user-images.githubusercontent.com/76901622/130319922-36d1f81e-2496-4982-8572-5c4a945d73db.png&quot; /&gt;&lt;/p&gt;</content><author><name>joseongmin</name></author><category term="project" /><category term="Market Microstructure" /><category term="Reinforcement Learning" /><summary type="html"></summary></entry><entry><title type="html">10-K/Q NLP Project</title><link href="http://localhost:4000/10K/" rel="alternate" type="text/html" title="10-K/Q NLP Project" /><published>2021-03-01T22:10:00+09:00</published><updated>2021-03-01T22:10:00+09:00</updated><id>http://localhost:4000/10K</id><content type="html" xml:base="http://localhost:4000/10K/">&lt;h1 id=&quot;what-has-inside&quot;&gt;What has inside?&lt;/h1&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Craling 10-K/Q filings from SEC Edgar&lt;/li&gt;
+  &lt;li&gt;preprocessing filling data&lt;/li&gt;
+  &lt;li&gt;Appling NLP techniques (dictionary approach with Loughran and Mcdonald wordlists and TF-IDF&lt;em&gt;/Cosine similarity) on MD&amp;amp;A&lt;/em&gt; sector to extract sentiment score&lt;/li&gt;
+  &lt;li&gt;Examined correlation and cointegration between sentiment score and ETF of KOSPI 200 categorized by same GISC sector to predict Korean stock market using sentiment of 10-K/Q&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/seongmin-Jo/10-K-Q-NLP&quot;&gt;Check it out&lt;/a&gt; here.
+If you need some help, just &lt;a href=&quot;https://github.com/seongmin-Jo/10-K-Q-NLP/issues&quot;&gt;tell me&lt;/a&gt;.&lt;/p&gt;</content><author><name>joseongmin</name></author><category term="project" /><category term="finance" /><summary type="html">What has inside?</summary></entry></feed>
