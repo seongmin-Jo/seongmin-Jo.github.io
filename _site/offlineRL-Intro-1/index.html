@@ -10,22 +10,24 @@
     <meta name=author content="Jo Seongmin">
 
     <!-- Begin Jekyll SEO tag v2.7.1 -->
-<title>Optimal Execution via Reinforcement Learning | Jo Seongmin</title>
+<title>Introduction of Offline Reinfoecement Learning | Jo Seongmin</title>
 <meta name="generator" content="Jekyll v3.9.0" />
-<meta property="og:title" content="Optimal Execution via Reinforcement Learning" />
+<meta property="og:title" content="Introduction of Offline Reinfoecement Learning" />
 <meta name="author" content="joseongmin" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="Using Almgren and Chriss Model via reinforcement learning" />
-<meta property="og:description" content="Using Almgren and Chriss Model via reinforcement learning" />
-<link rel="canonical" href="http://localhost:4000/Optimal-Execution/" />
-<meta property="og:url" content="http://localhost:4000/Optimal-Execution/" />
+<meta name="description" content="Definition of Offline Reinforment Learning" />
+<meta property="og:description" content="Definition of Offline Reinforment Learning" />
+<link rel="canonical" href="http://localhost:4000/offlineRL-Intro-1/" />
+<meta property="og:url" content="http://localhost:4000/offlineRL-Intro-1/" />
 <meta property="og:site_name" content="Jo Seongmin" />
+<meta property="og:image" content="http://localhost:4000/assets/images/[Markdowm%20Image.jpg" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2021-05-23T22:10:00+09:00" />
-<meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="Optimal Execution via Reinforcement Learning" />
+<meta property="article:published_time" content="2021-06-21T22:44:00+09:00" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta property="twitter:image" content="http://localhost:4000/assets/images/[Markdowm%20Image.jpg" />
+<meta property="twitter:title" content="Introduction of Offline Reinfoecement Learning" />
 <script type="application/ld+json">
-{"url":"http://localhost:4000/Optimal-Execution/","headline":"Optimal Execution via Reinforcement Learning","dateModified":"2021-05-23T22:10:00+09:00","datePublished":"2021-05-23T22:10:00+09:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/Optimal-Execution/"},"author":{"@type":"Person","name":"joseongmin"},"description":"Using Almgren and Chriss Model via reinforcement learning","@type":"BlogPosting","@context":"https://schema.org"}</script>
+{"url":"http://localhost:4000/offlineRL-Intro-1/","headline":"Introduction of Offline Reinfoecement Learning","dateModified":"2021-06-21T22:44:00+09:00","datePublished":"2021-06-21T22:44:00+09:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/offlineRL-Intro-1/"},"author":{"@type":"Person","name":"joseongmin"},"image":"http://localhost:4000/assets/images/[Markdowm%20Image.jpg","description":"Definition of Offline Reinforment Learning","@type":"BlogPosting","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 
@@ -51,7 +53,7 @@
 <meta name="msapplication-square310x310logo" content="mstile-310x310.png" />
 
 
-    <link rel="canonical" href="http://localhost:4000/Optimal-Execution/">
+    <link rel="canonical" href="http://localhost:4000/offlineRL-Intro-1/">
     <link rel="alternate" type="application/rss+xml" title="" href="http://localhost:4000/feed.xml" />
 
     <style>
@@ -505,15 +507,15 @@ pre { box-sizing: border-box; margin: 0 0 1.75em 0; width: 100%; padding: 5px 10
 
 
 
-<h1 class="title"> Optimal Execution via Reinforcement Learning</h1>
+<h1 class="title">Introduction of Offline Reinfoecement Learning</h1>
 
 <span class="date">
-    <time datetime="23-05-2021">Sunday. May 23, 2021</time>
+    <time datetime="21-06-2021">Monday. June 21, 2021</time>
      - <span class="reading-time" title="Estimated read time">
     
 
     
-        1 min
+        4 mins
     
 </span>
 
@@ -522,29 +524,111 @@ pre { box-sizing: border-box; margin: 0 0 1.75em 0; width: 100%; padding: 5px 10
 
     <div class="post-tags">
         
-            <a class="item" href="http://localhost:4000/tags/#market-microstructure">Market Microstructure</a>
-        
             <a class="item" href="http://localhost:4000/tags/#reinforcement-learning">Reinforcement Learning</a>
         
     </div>
 
 
-<p><img width="856" alt="ddd" src="https://user-images.githubusercontent.com/76901622/130319568-e4d41da6-6bcf-4877-a8a0-4dac33502a87.png" /></p>
+<h1 id="what-is-offlinebatched-reinforcement-learning">What is Offline(Batched) reinforcement learning</h1>
 
-<p><img width="1084" alt="ddddd" src="https://user-images.githubusercontent.com/76901622/130319791-ce0aae40-2208-4c95-bb89-a8898954384b.png" /></p>
+<p><strong>Definition 1.1</strong> Offline reinforcement learning means RL algorithms that utilize previously collected data <em>D</em>, without additional online data collection <a href="https://arxiv.org/pdf/2005.01643.pdf">1</a></p>
 
-<p><img width="1052" alt="dddddddd" src="https://user-images.githubusercontent.com/76901622/130319809-6799546d-5cce-4303-a862-331c3032d00a.png" /></p>
+<p><img src="https://user-images.githubusercontent.com/76901622/130313887-5e7f1d37-062e-4104-a89d-0fcc71066a34.jpg" alt="offline_frame" /></p>
 
-<p><img width="1070" alt="d" src="https://user-images.githubusercontent.com/76901622/130319830-a2be6a18-d3dc-4a1f-bb17-9052663e5458.png" /></p>
+<h2 id="why-offline-rl">Why Offline RL</h2>
 
-<p><img width="1074" alt="asdf" src="https://user-images.githubusercontent.com/76901622/130319843-bae9a2a7-7432-42c1-989c-f16ad32ba9a9.png" /></p>
+<ul>
+  <li>
+    <p>Compared to supervised learning, Online RL utilizes a feedback loop based on trial and error that requires interaction during learning. <a href="https://papers.nips.cc/paper/2020/hash/f7efa4f864ae9b88d43527f4b14f750f-Abstract.html">2</a></p>
+  </li>
+  <li>
+    <p>In many settings, this sort of online interaction is impractical, either because data collection is expensive and dangerous (e.g. autonomous driving, or healthcare)<a href="https://proceedings.neurips.cc/paper/2020/file/0d2b2061826a5df3221116a5085a6052-Paper.pdf">4</a></p>
+  </li>
+  <li>
+    <p>Furthermore, even in domains where online interaction is feasible, weight still prefer to utilize previously collected data instead (e.g. if the domain is complex and effective generalization requires large datasets.)<a href="https://arxiv.org/abs/2102.08363">5</a></p>
+  </li>
+</ul>
 
-<p><img width="1054" alt="asdfasgdf" src="https://user-images.githubusercontent.com/76901622/130319861-028aef35-c088-401e-b52e-3246c341c354.png" /></p>
+<h2 id="example-senario-in-optimal-exectution-agent">Example Senario in Optimal Exectution Agent</h2>
 
-<p><img width="1054" alt="adhf" src="https://user-images.githubusercontent.com/76901622/130319922-36d1f81e-2496-4982-8572-5c4a945d73db.png" /></p>
+<p><strong>Limits of making simulator</strong> Order execution can be viewed as interactive sequential decision making problem. However, since the goal of Optimal Execution Algorithm is to interact successfully with real humans (in market), collecting trials requires interacting in market, which may be prohibitively expensive at the scale needed to train effective execution agents. So <strong>the RL Agent needs simulator to train agents</strong>, but it has lots limits. However, offline data collected directly from past execution in real market can replace simulator <a href="https://arxiv.org/abs/1812.06600">6</a></p>
+
+<p><strong>Decision Making in execution</strong> Conventional active reinforcement learning may be prohibitively dangerous in market - even utilizing a fully trained policy to execute. Therefore, offline RL might be the viable path to apply reinforcement learning in such settings. Offline data would then be obtained from past execution or select “actions” from historical data.</p>
+
+<p><strong>Generalization of execution policy</strong> There is many stocks of diverse prices in market. Therefore, we want to learn policies for a variety of stocks. ( e.g. the agent who orders Samsung Electronics well should also order LG Electronics well.) In that case, each skill by itself might require a very large amount of interaction, as we would need to collect enough data to earn the skill which generalizes effectively to all the situations (e.g. all the different stocks) in which the agent might need to perform it. With offline RL, we could instead imagine including all of the data the agent has ever collected for all of its previously learned skills in the data buffer for each new skill that it learns. In this way, offline RL can effectively utilize multi-task data.</p>
+
+<h1 id="challenges-of-offline-rl">Challenges of Offline RL</h1>
+
+<ol>
+  <li>
+    <p>Offline RL relies entirely on the static dataset <em>D</em>, without exploration : nothing to address this challenge [<a href="https://arxiv.org/pdf/2005.01643.pdf">1</a>]</p>
+  </li>
+  <li>
+    <p>Offline RL makes challenge when making and answer Counterfactual queries : to learn a policy that something differently from the pattern of behavior observed in the dataset <em>D</em> : forgo the goal of finding the optimal policy, and instead aim to find the best possible policy using the fixed offline dataset [<a href="https://arxiv.org/pdf/2005.01643.pdf">1</a>]</p>
+  </li>
+  <li>
+    <p>Recent studies have observed that direct use of RL algorithms originally developed for the online or interactive paradigm leads to poor results in the offline RL setting</p>
+
+    <ul>
+      <li><strong>Distribution shift issue</strong> : function approximator (policy, value function, model) trained one distribution should be evaluated on a <strong>different distribution</strong> without further interaction</li>
+    </ul>
+  </li>
+</ol>
+
+<h1 id="how-to-address-distribution-shift-issue-currently">How to address distribution shift issue currently</h1>
+
+<h2 id="paradigm-in-model-free">Paradigm in Model free</h2>
+
+<ol>
+  <li>
+    <p>Model-free approach is fail in the offline RL setting, due to large extrapolation error when the Q-function is evaluated on <strong>out-of-distribution actions (distribution shift)</strong>, which can lead to unstable learning and divergence <a href="https://arxiv.org/pdf/2005.01643.pdf">1</a></p>
+  </li>
+  <li>
+    <p>Constraining the learned policy to the behavior policy induced by the dataset to overcome this <a href="https://proceedings.neurips.cc/paper/2020/file/0d2b2061826a5df3221116a5085a6052-Paper.pdf">4</a></p>
+  </li>
+  <li>
+    <p>This method is limited to behaviors within the data manifold and make difficult to generalize <a href="https://arxiv.org/pdf/2005.01643.pdf">1</a>, <a href="https://arxiv.org/abs/2102.08363">5</a></p>
+  </li>
+</ol>
+
+<h2 id="paradigm-in-model-based">Paradigm in Model based</h2>
+
+<ol>
+  <li>
+    <p>Model-based approach is fail in the offline RL setting, due to distribution shift and model-bias <a href="https://proceedings.neurips.cc/paper/2020/hash/a322852ce0df73e204b7e67cbbef0d0a-Abstract.html">3</a></p>
+  </li>
+  <li>
+    <p>Model error on out-of-distribution states that often drives exploration and corrective feedback in the online setting can be detrimental when interaction is not allowed in offline setting <a href="https://proceedings.neurips.cc/paper/2020/hash/a322852ce0df73e204b7e67cbbef0d0a-Abstract.html">3</a>, <a href="https://arxiv.org/abs/2102.08363">5</a></p>
+  </li>
+  <li>
+    <p>Using uncertainty quantification to overcome them ( MOReL, MOPO ) <a href="https://proceedings.neurips.cc/paper/2020/hash/a322852ce0df73e204b7e67cbbef0d0a-Abstract.html">3</a>, <a href="https://arxiv.org/abs/2102.08363">5</a></p>
+  </li>
+</ol>
+
+<h3 id="refernece">Refernece</h3>
+<p><a href="https://arxiv.org/pdf/2005.01643.pdf">1</a> A. Kumar. Offline Reinforcement Learning: Tutorial, Review, and Perspectives on Open Problems. 2020.</p>
+
+<p><a href="https://papers.nips.cc/paper/2020/hash/f7efa4f864ae9b88d43527f4b14f750f-Abstract.html">2</a> R. Kidambi. MOReL: Model-based Offline Reinforcement Learning. 2020.</p>
+
+<p><a href="https://proceedings.neurips.cc/paper/2020/hash/a322852ce0df73e204b7e67cbbef0d0a-Abstract.html">3</a> T. Yu. MOPO: Model-based Offline Policy Optimization. 2020.</p>
+
+<p><a href="https://proceedings.neurips.cc/paper/2020/file/0d2b2061826a5df3221116a5085a6052-Paper.pdf">4</a> A. Kumar. Conservative Q-Learning for Offline Reinforcement Learning. 2020.</p>
+
+<p><a href="https://arxiv.org/abs/2102.08363">5</a> T. Yu. COMBO: Conservative Offline Model-Based Policy Optimization. 2021.</p>
+
+<p><a href="https://arxiv.org/abs/1812.06600">6</a> B. Ning. Double Deep Q-Learning for Optimal Execution</p>
 
 
 
+
+    <div class="blog-navigation">
+        
+            <a class="prev"></a>
+        
+        
+            <a class="next" href="http://localhost:4000/offlineRL-Intro/">Introduction of Offline Reinfoecement Learning &raquo;</a>
+        
+    </div>
 
 
 
@@ -553,8 +637,6 @@ pre { box-sizing: border-box; margin: 0 0 1.75em 0; width: 100%; padding: 5px 10
     
         
         
-            
-                
             
                 
                     
@@ -576,8 +658,6 @@ pre { box-sizing: border-box; margin: 0 0 1.75em 0; width: 100%; padding: 5px 10
         
             
                 
-            
-                
                     
                     <li class="relatedPost">
                         <a href="http://localhost:4000/offlineRL-Intro/">Introduction of Offline Reinfoecement Learning
@@ -595,10 +675,19 @@ pre { box-sizing: border-box; margin: 0 0 1.75em 0; width: 100%; padding: 5px 10
             
                 
             
+        
+    
+        
+        
+            
+                
+            
+        
+            
                 
                     
                     <li class="relatedPost">
-                        <a href="http://localhost:4000/offlineRL-Intro-1/">Introduction of Offline Reinfoecement Learning
+                        <a href="http://localhost:4000/Optimal-Execution/"> Optimal Execution via Reinforcement Learning
                         
                         </a>
                     </li>
@@ -610,23 +699,6 @@ pre { box-sizing: border-box; margin: 0 0 1.75em 0; width: 100%; padding: 5px 10
     
         
         
-            
-                
-            
-                
-            
-        
-            
-                
-            
-                
-            
-        
-    
-        
-        
-            
-                
             
                 
             
@@ -658,7 +730,7 @@ pre { box-sizing: border-box; margin: 0 0 1.75em 0; width: 100%; padding: 5px 10
             <!-- If site width is set to normal, you may choose any two share links -->
             <a
                 class="twitter"
-                href="https://twitter.com/intent/tweet?text=http://localhost:4000/Optimal-Execution/ -  Optimal Execution via Reinforcement Learning by @"
+                href="https://twitter.com/intent/tweet?text=http://localhost:4000/offlineRL-Intro-1/ - Introduction of Offline Reinfoecement Learning by @"
             >
                 <svg class="icon icon-twitter">
                     <use xlink:href="#icon-twitter"></use></svg
@@ -675,11 +747,11 @@ pre { box-sizing: border-box; margin: 0 0 1.75em 0; width: 100%; padding: 5px 10
                 ><span class="icon-facebook-rect">Share</span>
             </a>
 
-            <!-- <a class="linkedin" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=http://localhost:4000/Optimal-Execution/&amp;title= Optimal Execution via Reinforcement Learning&amp;summary=Using Almgren and Chriss Model via reinforcement learning&amp;source=http://localhost:4000" target="_blank">
+            <!-- <a class="linkedin" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=http://localhost:4000/offlineRL-Intro-1/&amp;title=Introduction of Offline Reinfoecement Learning&amp;summary=Definition of Offline Reinforment Learning&amp;source=http://localhost:4000" target="_blank">
                 <svg class="icon icon-linkedin"><use xlink:href="#icon-linkedin"></use></svg><span class="icon-linkedin">Share</span>
             </a> -->
 
-            <!-- <a class="reddit" href="https://reddit.com/submit?url=http://localhost:4000/Optimal-Execution/&amp;title= Optimal Execution via Reinforcement Learning" target="_blank">
+            <!-- <a class="reddit" href="https://reddit.com/submit?url=http://localhost:4000/offlineRL-Intro-1/&amp;title=Introduction of Offline Reinfoecement Learning" target="_blank">
                 <svg class="icon icon-reddit"><use xlink:href="#icon-reddit"></use></svg><span class="icon-reddit">Share</span>
             </a> -->
         </div>
@@ -694,8 +766,8 @@ pre { box-sizing: border-box; margin: 0 0 1.75em 0; width: 100%; padding: 5px 10
     <script type="text/javascript">
 
         var disqus_config = function () {
-            this.page.url = 'http://localhost:4000/Optimal-Execution/';
-            this.page.identifier = '/Optimal-Execution';
+            this.page.url = 'http://localhost:4000/offlineRL-Intro-1/';
+            this.page.identifier = '/offlineRL-Intro 1';
         };
         var disqus_shortname = 'mydisqus';
         var disqus_developer = 0;

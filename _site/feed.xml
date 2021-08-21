@@ -1,4 +1,281 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-08-21T21:26:56+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Jo Seongmin</title><subtitle>A blog about Reinforcemet Learning, Market Microstructure and Mathematics</subtitle><entry><title type="html">Introduction of Offline Reinfoecement Learning</title><link href="http://localhost:4000/offlineRL-Intro/" rel="alternate" type="text/html" title="Introduction of Offline Reinfoecement Learning" /><published>2021-06-21T22:44:00+09:00</published><updated>2021-06-21T22:44:00+09:00</updated><id>http://localhost:4000/offlineRL-Intro</id><content type="html" xml:base="http://localhost:4000/offlineRL-Intro/">&lt;h1 id=&quot;what-is-offlinebatched-reinforcement-learning&quot;&gt;What is Offline(Batched) reinforcement learning&lt;/h1&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-08-21T22:17:34+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Jo Seongmin</title><subtitle>A blog about Reinforcemet Learning, Market Microstructure and Mathematics</subtitle><entry><title type="html">Model-Based Offline Reinfoecement Learning</title><link href="http://localhost:4000/Model-Based/" rel="alternate" type="text/html" title="Model-Based Offline Reinfoecement Learning" /><published>2021-07-07T22:44:00+09:00</published><updated>2021-07-07T22:44:00+09:00</updated><id>http://localhost:4000/Model-Based</id><content type="html" xml:base="http://localhost:4000/Model-Based/">&lt;h1 id=&quot;morel-model-based-offline-reinforcement-learning-2020&quot;&gt;MOReL: Model-Based Offline Reinforcement Learning (2020)&lt;/h1&gt;
+
+&lt;h2 id=&quot;goal&quot;&gt;Goal&lt;/h2&gt;
+
+&lt;p&gt;&lt;img width=&quot;553&quot; alt=&quot;asdfasdf&quot; src=&quot;https://user-images.githubusercontent.com/76901622/130322238-92e35cd3-3075-4a5b-9fb4-448b602cbf11.png&quot; /&gt;&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;MOReL learns a pessimistic MDP (P-MDP) from the dataset and uses it for policy sea&lt;/li&gt;
+  &lt;li&gt;P-MDP partitions the state-action space into known (green) and unknown (orange) regions, and also forces a transition to a low reward
+absorbing state (HALT) from unknown regions. Blue dots denote the support in the dataset.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;algorithm&quot;&gt;Algorithm&lt;/h2&gt;
+
+&lt;p&gt;&lt;img width=&quot;1063&quot; alt=&quot;qwer&quot; src=&quot;https://user-images.githubusercontent.com/76901622/130322264-122c7b01-7c44-4a27-98a5-8c7ef3af4926.png&quot; /&gt;&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;strong&gt;Learning the dynamics model&lt;/strong&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;The first step involves using the offline dataset to learn an approximate dynamics model $\hat{P}(\cdot \mid s, a)$. Since the offline dataset may not span the entire state space, the learned model may not be globally accurate. Naïve MBRL approach that directly plans with the learned model may overestimate rewards in unfamiliar parts of the state space, resulting in a highly sub-optimal policy. We overcome this with the next step.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;strong&gt;Unknown state-action detector (USAD)&lt;/strong&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Like hypothesis testing, partition known and unknown regions based on the accuracy of learned model as follows.&lt;/p&gt;
+
+&lt;p&gt;&lt;img width=&quot;800&quot; alt=&quot;zvb&quot; src=&quot;https://user-images.githubusercontent.com/76901622/130322302-28586160-c920-4254-9c92-e67de0467f47.png&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;$D_{T V}(\hat{P}(\cdot \mid s, a), P(\cdot \mid s, a))$ denotes the total variation distance between $\hat{P}(\cdot \mid s, a)$ and $P(\cdot \mid s, a)$&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Two factors contribute to USAD’s effectiveness&lt;/p&gt;
+
+    &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;- data availability: having sufficient data points “close” to the query
+- quality of representations: certain representations, like those based on physics, can lead to better
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+
+    &lt;p&gt;generalization guarantees.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;strong&gt;Construct Pessimistic MDP construction&lt;/strong&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;The $(\alpha, \kappa)$-pessimistic MDP is described by $\hat{\mathcal{M}}&lt;em&gt;{p}:=\left{S \cup H A L T, A, r&lt;/em&gt;{p}, \hat{P}&lt;em&gt;{p}, \hat{\rho}&lt;/em&gt;{0}, \gamma\right} .$ Here, $S$ and $A$ are states and actions in the MDP $\mathcal{M}$. HALT is an additional absorbing state we introduce into the state space of $\hat{\mathcal{M}}&lt;em&gt;{p}$. $\hat{\rho}&lt;/em&gt;{0}$ is the initial state distribution learned from the dataset $\mathcal{D} \cdot \gamma$ is the discount factor (same as $\left.\mathcal{M}\right)$. The modified reward and transition dynamics are given by:&lt;/p&gt;
+
+&lt;p&gt;&lt;img width=&quot;844&quot; alt=&quot;sghf&quot; src=&quot;https://user-images.githubusercontent.com/76901622/130322351-56542f54-204e-4db8-b076-5ace4f852cb5.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;$\delta\left(s^{\prime}=\mathrm{HALT}\right)$ is the Dirac delta function, which forces the MDP to transition to the absorbing state HALT. For unknown state-action pairs, use a reward of $-\kappa$, while all known state-actions receive the same reward as in the environment. The P-MDP heavily punishes policies that visit unknown states, thereby providing a safeguard against distribution shift and model exploitation.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;strong&gt;Planning&lt;/strong&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Perform planning in the P-MDP defined above. For simplicity, we assume a planning oracle that returns an $\epsilon_{\pi}$ -sub-optimal policy in the P-MDP. A number of algorithms based on MPC, search-based planning, dynamic programming, or policy optimization can be used to approximately realize this.&lt;/p&gt;
+
+&lt;h2 id=&quot;benchmark-resultstoy-gym&quot;&gt;Benchmark results(Toy Gym)&lt;/h2&gt;
+
+&lt;p&gt;&lt;img width=&quot;671&quot; alt=&quot;sfhj&quot; src=&quot;https://user-images.githubusercontent.com/76901622/130322386-a153f428-bebd-4388-9857-e8e7725b6007.png&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;strong&gt;Importance of pessimistic MDP&lt;/strong&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Compare MOReL with a naive MBRL approach that first learns a dynamics model using the offline data without any safeguards against model inaccuracy.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img width=&quot;832&quot; alt=&quot;sgnf&quot; src=&quot;https://user-images.githubusercontent.com/76901622/130322407-2ca9f1e1-fd67-4bdf-a1fe-73a1a0983ef3.png&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;The naive MBRL approach already works well, achieving results comparable to prior algorithms like BCQ and BEAR. However, MOReL clearly exhibits more stable and monotonic learning progress.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Furthermore, in the case of naive MBRL, we observe that performance can quickly degrade after a few hundred steps of policy improvement&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;strong&gt;Transfer from pessimistic MDP to environment&lt;/strong&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;MOReL suggest that the value of a policy in the P-MDP cannot substantially exceed the value in the
+environment.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;This makes in the P-MDP an approximate lower bound on the true performance, and a good surrogate of True MDP for optimization.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Author observe that the value in the true environment closely correlates with the value in P-MDP. In par- ticular, the P-MDP value never substantially exceeds the true performance, suggesting that the pessimism helps to avoid model exploitation.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;But MOReL constructs terminating states based on a hard threshold on uncertainty.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&quot;mopo-model-based-offline-policy-optimization-2020&quot;&gt;MOPO: Model-based Offline Policy Optimization (2020)&lt;/h1&gt;
+
+&lt;h2 id=&quot;goal-1&quot;&gt;Goal&lt;/h2&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;Design an offline model-based reinforcement learning algorithm that can take actions that are not strictly within the support of the behavioral distribution.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Balance the return and risk since models will become increasingly inaccurate further from the behavioral distri- bution (vanilla model-based policy optimization)&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;the potential gain in performance by escaping the behavioral distribution and finding a better policy&lt;/li&gt;
+  &lt;li&gt;the risk of overfitting to the errors of the dynamics at regions far away from the behavioral distribution.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;To achieve the optimal balance, bound the return from below by the return of a constructed model MDP penal- ized by the uncertainty of the dynamics and maximize conservative estimation of the return by an off-the-shelf reinforcement learning algorithm (MOPO)&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;preliminaries&quot;&gt;Preliminaries&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;$T\left(s^{\prime} \mid s, a\right)=$ the transition dynamics (True dynamics)&lt;/li&gt;
+  &lt;li&gt;$\eta_{M}(\pi):=\underset{\pi, T, \mu_{0}}{\mathbb{E}}\left[\sum_{t=0}^{\infty} \gamma^{t} r\left(s_{t}, a_{t}\right)\right] .=$ expected discounted return (goal is maximizing this)&lt;/li&gt;
+  &lt;li&gt;$\eta_{\widehat{M}}(\pi)=$ A natural estimator for the true return $\eta_{M}(\pi)$&lt;/li&gt;
+  &lt;li&gt;Behavioral distribution $=$ sampled from distribution $\mathcal{D}_{\text {env }}$&lt;/li&gt;
+  &lt;li&gt;$\widehat{T}$ defines a model $\operatorname{MDP} \widehat{M}=\left(\mathcal{S}, \mathcal{A}, \widehat{T}, r, \mu_{0}, \gamma\right)$&lt;/li&gt;
+  &lt;li&gt;$\mathbb{P}_{\widehat{T}, t}^{\pi}(s)=$ the probability of being in state $s$ at time step $t$ if actions are sampled according to $\pi$ and transitions according to $\widehat{T}$&lt;/li&gt;
+  &lt;li&gt;$\rho_{\widehat{T}}^{\pi}(s, a)=$ the discounted occupancy measure of policy $\pi$ under dynamics $\widehat{T}: \rho_{\widehat{T}}^{\pi}(s, a):=\pi(a \mid s) \sum_{t=0}^{\infty} \gamma^{t} \mathbb{P}_{\widehat{T}, t}^{\pi}(s)$&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;algorithm-1&quot;&gt;Algorithm&lt;/h2&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;strong&gt;Quantifying the uncertainty: from the dynamics to the total return&lt;/strong&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Let $G_{\widehat{M}}^{\pi}(s, a):=\underset{s^{\prime} \sim \widehat{T}(s, a)}{\mathbb{E}}\left[V_{M}^{\pi}\left(s^{\prime}\right)\right]-\underset{s^{\prime} \sim T(s, a)}{\mathbb{E}}\left[V_{M}^{\pi}\left(s^{\prime}\right)\right]$, we can get&lt;/p&gt;
+
+&lt;p&gt;&lt;img width=&quot;723&quot; alt=&quot;shfg&quot; src=&quot;https://user-images.githubusercontent.com/76901622/130322605-aaba76d4-1774-4d9f-a84c-f5f7f00a5698.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;By definition, $G \frac{\pi}{\widehat{M}}(s, a)$ measures the difference between $M$ and $\widehat{M}$ under the test function $V^{\pi}$. By equation(1), it governs the differences between the performances of $\pi$ in the two MDPs. If we could estimate $G_{\widehat{M}}^{\pi}(s, a)$ or bound it from above, then we could use the RHS of (1) as an upper bound for the estimation error of $\eta_{M}(\pi)$.&lt;/p&gt;
+
+&lt;p&gt;Moreover, equation (2) suggests that a policy that obtains high reward in the estimated MDP while also minimizing $G_{\widehat{M}}^{\pi}(s, a)$ will obtain high reward in the real MDP.&lt;/p&gt;
+
+&lt;p&gt;However, computing $G_{\widehat{M}}^{\pi}(s, a)$ remains elusive because it depends on the unknown function $V_{M}^{\pi} .$ Leveraging properties of $V_{M}^{\pi}$, we will replace $G_{\widehat{M}}^{\pi}(s, a)$ by an upper bound that depends solely on the error of the dynamics $\widehat{T}$&lt;/p&gt;
+
+&lt;p&gt;Given an admissible error estimator, we define the uncertainty-penalized reward $\tilde{r}(s, a):=r(s, a)-\lambda u(s, a)$ where $\lambda:=\gamma c$, and the uncertainty-penalized MDP $\widetilde{M}=\left(\mathcal{S}, \mathcal{A}, \widehat{T}, \tilde{r}, \mu_{0}, \gamma\right)$. We observe that $\widetilde{M}$ is conservative in that the return under it bounds from below the true return:&lt;/p&gt;
+
+&lt;p&gt;&lt;img width=&quot;946&quot; alt=&quot;dhgj&quot; src=&quot;https://user-images.githubusercontent.com/76901622/130322676-f1130a3c-c38c-40a6-afe5-4b62b0cb4cae.png&quot; /&gt;&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;strong&gt;Policy optimization on uncertainty-penalized MDPs&lt;/strong&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Optimize the policy on the uncertainty-penalized MDP $\widetilde{M}$ in Algorithm 1 .&lt;/p&gt;
+
+&lt;p&gt;&lt;img width=&quot;765&quot; alt=&quot;agdh&quot; src=&quot;https://user-images.githubusercontent.com/76901622/130322701-711b3644-6e9c-40fc-badf-0cdaef20703c.png&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;benchmark-results-toy-gym&quot;&gt;Benchmark results (Toy Gym)&lt;/h2&gt;
+
+&lt;p&gt;&lt;img width=&quot;895&quot; alt=&quot;rsyj&quot; src=&quot;https://user-images.githubusercontent.com/76901622/130322736-0f8caf60-df92-4b4c-802b-9c4ae481b8bd.png&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;Unlike MOReL, which constructs terminating states based on a hard threshold on uncertainty, MOPO uses a soft reward penalty to incorporate uncertainty. ( potential benefit of a soft penalty is that the policy is allowed to take a few risky actions and then return to the confident area near the behavioral distribution without being terminated. )&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Using uncertainty penalized MDP, which is constructed where the reward is given by $\widetilde{r}(\mathbf{s}, \mathbf{a})=\hat{r}(\mathbf{s}, \mathbf{a})-$ $\lambda u(\mathbf{s}, \mathbf{a})$ and the learned dynamics model, MOPO learns a policy in this “uncertainty-penalized” MDP $\widetilde{\mathcal{M}}=$ $\left(\mathcal{S}, \mathcal{A}, \widehat{T}, \widetilde{r}, \mu_{0}, \gamma\right)$ which has the property that $J(\widetilde{\mathcal{M}}, \pi) \leq J(\mathcal{M}, \pi) \forall \pi .$ By constructing and optimizing such a lower bound, offline model-based RL algorithms (MOPO and MOReL) avoid the aforementioned pitfalls like model-bias and distribution shift.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;However, strong reliance on uncertainty quantification is challenging for complex datasets or deep neural network models (MOReL and MOPO)&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;refernece&quot;&gt;Refernece&lt;/h3&gt;
+
+&lt;p&gt;[1] R. Kidambi. MOReL: Model-based Offline Reinforcement Learning. 2020.&lt;/p&gt;
+
+&lt;p&gt;[2] T. Yu. MOPO: Model-based Offline Policy Optimization. 2020.&lt;/p&gt;
+
+&lt;p&gt;[3] T. Yu. COMBO: Conservative Offline Model-Based Policy Optimization. 2021&lt;/p&gt;</content><author><name>joseongmin</name></author><category term="blog" /><category term="Reinforcement Learning" /><summary type="html">MOReL: Model-Based Offline Reinforcement Learning (2020)</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:4000/assets/images/%5BMarkdowm%20Image.jpg" /><media:content medium="image" url="http://localhost:4000/assets/images/%5BMarkdowm%20Image.jpg" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">Introduction of Offline Reinfoecement Learning</title><link href="http://localhost:4000/offlineRL-Intro-1/" rel="alternate" type="text/html" title="Introduction of Offline Reinfoecement Learning" /><published>2021-06-21T22:44:00+09:00</published><updated>2021-06-21T22:44:00+09:00</updated><id>http://localhost:4000/offlineRL-Intro%201</id><content type="html" xml:base="http://localhost:4000/offlineRL-Intro-1/">&lt;h1 id=&quot;what-is-offlinebatched-reinforcement-learning&quot;&gt;What is Offline(Batched) reinforcement learning&lt;/h1&gt;
+
+&lt;p&gt;&lt;strong&gt;Definition 1.1&lt;/strong&gt; Offline reinforcement learning means RL algorithms that utilize previously collected data &lt;em&gt;D&lt;/em&gt;, without additional online data collection &lt;a href=&quot;https://arxiv.org/pdf/2005.01643.pdf&quot;&gt;1&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://user-images.githubusercontent.com/76901622/130313887-5e7f1d37-062e-4104-a89d-0fcc71066a34.jpg&quot; alt=&quot;offline_frame&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;why-offline-rl&quot;&gt;Why Offline RL&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;Compared to supervised learning, Online RL utilizes a feedback loop based on trial and error that requires interaction during learning. &lt;a href=&quot;https://papers.nips.cc/paper/2020/hash/f7efa4f864ae9b88d43527f4b14f750f-Abstract.html&quot;&gt;2&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;In many settings, this sort of online interaction is impractical, either because data collection is expensive and dangerous (e.g. autonomous driving, or healthcare)&lt;a href=&quot;https://proceedings.neurips.cc/paper/2020/file/0d2b2061826a5df3221116a5085a6052-Paper.pdf&quot;&gt;4&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Furthermore, even in domains where online interaction is feasible, weight still prefer to utilize previously collected data instead (e.g. if the domain is complex and effective generalization requires large datasets.)&lt;a href=&quot;https://arxiv.org/abs/2102.08363&quot;&gt;5&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;example-senario-in-optimal-exectution-agent&quot;&gt;Example Senario in Optimal Exectution Agent&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;Limits of making simulator&lt;/strong&gt; Order execution can be viewed as interactive sequential decision making problem. However, since the goal of Optimal Execution Algorithm is to interact successfully with real humans (in market), collecting trials requires interacting in market, which may be prohibitively expensive at the scale needed to train effective execution agents. So &lt;strong&gt;the RL Agent needs simulator to train agents&lt;/strong&gt;, but it has lots limits. However, offline data collected directly from past execution in real market can replace simulator &lt;a href=&quot;https://arxiv.org/abs/1812.06600&quot;&gt;6&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Decision Making in execution&lt;/strong&gt; Conventional active reinforcement learning may be prohibitively dangerous in market - even utilizing a fully trained policy to execute. Therefore, offline RL might be the viable path to apply reinforcement learning in such settings. Offline data would then be obtained from past execution or select “actions” from historical data.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Generalization of execution policy&lt;/strong&gt; There is many stocks of diverse prices in market. Therefore, we want to learn policies for a variety of stocks. ( e.g. the agent who orders Samsung Electronics well should also order LG Electronics well.) In that case, each skill by itself might require a very large amount of interaction, as we would need to collect enough data to earn the skill which generalizes effectively to all the situations (e.g. all the different stocks) in which the agent might need to perform it. With offline RL, we could instead imagine including all of the data the agent has ever collected for all of its previously learned skills in the data buffer for each new skill that it learns. In this way, offline RL can effectively utilize multi-task data.&lt;/p&gt;
+
+&lt;h1 id=&quot;challenges-of-offline-rl&quot;&gt;Challenges of Offline RL&lt;/h1&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;Offline RL relies entirely on the static dataset &lt;em&gt;D&lt;/em&gt;, without exploration : nothing to address this challenge [&lt;a href=&quot;https://arxiv.org/pdf/2005.01643.pdf&quot;&gt;1&lt;/a&gt;]&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Offline RL makes challenge when making and answer Counterfactual queries : to learn a policy that something differently from the pattern of behavior observed in the dataset &lt;em&gt;D&lt;/em&gt; : forgo the goal of finding the optimal policy, and instead aim to find the best possible policy using the fixed offline dataset [&lt;a href=&quot;https://arxiv.org/pdf/2005.01643.pdf&quot;&gt;1&lt;/a&gt;]&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Recent studies have observed that direct use of RL algorithms originally developed for the online or interactive paradigm leads to poor results in the offline RL setting&lt;/p&gt;
+
+    &lt;ul&gt;
+      &lt;li&gt;&lt;strong&gt;Distribution shift issue&lt;/strong&gt; : function approximator (policy, value function, model) trained one distribution should be evaluated on a &lt;strong&gt;different distribution&lt;/strong&gt; without further interaction&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h1 id=&quot;how-to-address-distribution-shift-issue-currently&quot;&gt;How to address distribution shift issue currently&lt;/h1&gt;
+
+&lt;h2 id=&quot;paradigm-in-model-free&quot;&gt;Paradigm in Model free&lt;/h2&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;Model-free approach is fail in the offline RL setting, due to large extrapolation error when the Q-function is evaluated on &lt;strong&gt;out-of-distribution actions (distribution shift)&lt;/strong&gt;, which can lead to unstable learning and divergence &lt;a href=&quot;https://arxiv.org/pdf/2005.01643.pdf&quot;&gt;1&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Constraining the learned policy to the behavior policy induced by the dataset to overcome this &lt;a href=&quot;https://proceedings.neurips.cc/paper/2020/file/0d2b2061826a5df3221116a5085a6052-Paper.pdf&quot;&gt;4&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;This method is limited to behaviors within the data manifold and make difficult to generalize &lt;a href=&quot;https://arxiv.org/pdf/2005.01643.pdf&quot;&gt;1&lt;/a&gt;, &lt;a href=&quot;https://arxiv.org/abs/2102.08363&quot;&gt;5&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;paradigm-in-model-based&quot;&gt;Paradigm in Model based&lt;/h2&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;Model-based approach is fail in the offline RL setting, due to distribution shift and model-bias &lt;a href=&quot;https://proceedings.neurips.cc/paper/2020/hash/a322852ce0df73e204b7e67cbbef0d0a-Abstract.html&quot;&gt;3&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Model error on out-of-distribution states that often drives exploration and corrective feedback in the online setting can be detrimental when interaction is not allowed in offline setting &lt;a href=&quot;https://proceedings.neurips.cc/paper/2020/hash/a322852ce0df73e204b7e67cbbef0d0a-Abstract.html&quot;&gt;3&lt;/a&gt;, &lt;a href=&quot;https://arxiv.org/abs/2102.08363&quot;&gt;5&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Using uncertainty quantification to overcome them ( MOReL, MOPO ) &lt;a href=&quot;https://proceedings.neurips.cc/paper/2020/hash/a322852ce0df73e204b7e67cbbef0d0a-Abstract.html&quot;&gt;3&lt;/a&gt;, &lt;a href=&quot;https://arxiv.org/abs/2102.08363&quot;&gt;5&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;refernece&quot;&gt;Refernece&lt;/h3&gt;
+&lt;p&gt;&lt;a href=&quot;https://arxiv.org/pdf/2005.01643.pdf&quot;&gt;1&lt;/a&gt; A. Kumar. Offline Reinforcement Learning: Tutorial, Review, and Perspectives on Open Problems. 2020.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://papers.nips.cc/paper/2020/hash/f7efa4f864ae9b88d43527f4b14f750f-Abstract.html&quot;&gt;2&lt;/a&gt; R. Kidambi. MOReL: Model-based Offline Reinforcement Learning. 2020.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://proceedings.neurips.cc/paper/2020/hash/a322852ce0df73e204b7e67cbbef0d0a-Abstract.html&quot;&gt;3&lt;/a&gt; T. Yu. MOPO: Model-based Offline Policy Optimization. 2020.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://proceedings.neurips.cc/paper/2020/file/0d2b2061826a5df3221116a5085a6052-Paper.pdf&quot;&gt;4&lt;/a&gt; A. Kumar. Conservative Q-Learning for Offline Reinforcement Learning. 2020.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://arxiv.org/abs/2102.08363&quot;&gt;5&lt;/a&gt; T. Yu. COMBO: Conservative Offline Model-Based Policy Optimization. 2021.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://arxiv.org/abs/1812.06600&quot;&gt;6&lt;/a&gt; B. Ning. Double Deep Q-Learning for Optimal Execution&lt;/p&gt;</content><author><name>joseongmin</name></author><category term="blog" /><category term="Reinforcement Learning" /><summary type="html">What is Offline(Batched) reinforcement learning</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:4000/assets/images/%5BMarkdowm%20Image.jpg" /><media:content medium="image" url="http://localhost:4000/assets/images/%5BMarkdowm%20Image.jpg" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">Introduction of Offline Reinfoecement Learning</title><link href="http://localhost:4000/offlineRL-Intro/" rel="alternate" type="text/html" title="Introduction of Offline Reinfoecement Learning" /><published>2021-06-21T22:44:00+09:00</published><updated>2021-06-21T22:44:00+09:00</updated><id>http://localhost:4000/offlineRL-Intro</id><content type="html" xml:base="http://localhost:4000/offlineRL-Intro/">&lt;h1 id=&quot;what-is-offlinebatched-reinforcement-learning&quot;&gt;What is Offline(Batched) reinforcement learning&lt;/h1&gt;
 
 &lt;p&gt;&lt;strong&gt;Definition 1.1&lt;/strong&gt; Offline reinforcement learning means RL algorithms that utilize previously collected data &lt;em&gt;D&lt;/em&gt;, without additional online data collection &lt;a href=&quot;https://arxiv.org/pdf/2005.01643.pdf&quot;&gt;1&lt;/a&gt;&lt;/p&gt;
 
