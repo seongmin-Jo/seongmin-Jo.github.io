@@ -1,16 +1,24 @@
 ---
 title: "Model-Free Offline Reinfoecement Learning"
 layout: post
-date: 2021-07-21 22:44
+date: 2021-07-18 21:44
 image: /assets/images/[Markdowm Image.jpg
 headerImage: false
+use_math: true
 tag:
-  - Reinforcement Learning
+- Reinforcement Learning
 star: false
 category: blog
 author: joseongmin
 description: Model-Free Offline Reinforment Learning
 ---
+
+# BCQ: Off-Policy Deep Reinforcement Learning without Exploration [1]
+
+
+
+
+
 
 ### Refernece
 

@@ -27,11 +27,11 @@ description: Model Based Offline Reinforment Learning
 
 <img width="1063" alt="qwer" src="https://user-images.githubusercontent.com/76901622/130322264-122c7b01-7c44-4a27-98a5-8c7ef3af4926.png">
 
-1. **Learning the dynamics model**
+1.**Learning the dynamics model**
 
 The first step involves using the offline dataset to learn an approximate dynamics model $\hat{P}(\cdot \mid s, a)$. Since the offline dataset may not span the entire state space, the learned model may not be globally accurate. Naïve MBRL approach that directly plans with the learned model may overestimate rewards in unfamiliar parts of the state space, resulting in a highly sub-optimal policy. We overcome this with the next step.
 
-2. **Unknown state-action detector (USAD)**
+2.**Unknown state-action detector (USAD)**
 
 Like hypothesis testing, partition known and unknown regions based on the accuracy of learned model as follows.
 
@@ -41,20 +41,20 @@ Like hypothesis testing, partition known and unknown regions based on the accura
 
 - Two factors contribute to USAD’s effectiveness
 
-      - data availability: having sufficient data points “close” to the query
-      - quality of representations: certain representations, like those based on physics, can lead to better
+    * data availability: having sufficient data points “close” to the query
+    * quality of representations: certain representations, like those based on physics, can lead to better
 
   generalization guarantees.
 
-3. **Construct Pessimistic MDP construction**
+3.**Construct Pessimistic MDP construction**
 
-The $(\alpha, \kappa)$-pessimistic MDP is described by $\hat{\mathcal{M}}_{p}:=\left\{S \cup H A L T, A, r_{p}, \hat{P}_{p}, \hat{\rho}_{0}, \gamma\right\} .$ Here, $S$ and $A$ are states and actions in the MDP $\mathcal{M}$. HALT is an additional absorbing state we introduce into the state space of $\hat{\mathcal{M}}_{p}$. $\hat{\rho}_{0}$ is the initial state distribution learned from the dataset $\mathcal{D} \cdot \gamma$ is the discount factor (same as $\left.\mathcal{M}\right)$. The modified reward and transition dynamics are given by:
+The $(\alpha, \kappa)$-pessimistic MDP is described by $\hat{\mathcal{M}}_{p}:=\left\{S \cup H A L T, A, r_{p}, \hat{P}_{p}, \hat{\rho}_{0}, \gamma\right\}$ Here, $S$ and $A$ are states $\hat{\rho}_{0}$ is the initial state distribution learned from the dataset $\mathcal{D} \cdot \gamma$ is the discount factor. The modified reward and transition dynamics are given by:
 
 <img width="844" alt="sghf" src="https://user-images.githubusercontent.com/76901622/130322351-56542f54-204e-4db8-b076-5ace4f852cb5.png">
 
 $\delta\left(s^{\prime}=\mathrm{HALT}\right)$ is the Dirac delta function, which forces the MDP to transition to the absorbing state HALT. For unknown state-action pairs, use a reward of $-\kappa$, while all known state-actions receive the same reward as in the environment. The P-MDP heavily punishes policies that visit unknown states, thereby providing a safeguard against distribution shift and model exploitation.
 
-4. **Planning**
+4.**Planning**
 
 Perform planning in the P-MDP defined above. For simplicity, we assume a planning oracle that returns an $\epsilon_{\pi}$ -sub-optimal policy in the P-MDP. A number of algorithms based on MPC, search-based planning, dynamic programming, or policy optimization can be used to approximately realize this.
 

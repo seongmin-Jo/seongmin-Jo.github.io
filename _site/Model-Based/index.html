@@ -2,6 +2,31 @@
 <html lang="en">
 <head>
     
+            <script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    TeX: {
+      equationNumbers: {
+        autoNumber: "AMS"
+      }
+    },
+    tex2jax: {
+    inlineMath: [ ['$', '$'] ],
+    displayMath: [ ['$$', '$$'] ],
+    processEscapes: true,
+  }
+});
+MathJax.Hub.Register.MessageHook("Math Processing Error",function (message) {
+	  alert("Math Processing Error: "+message[1]);
+	});
+MathJax.Hub.Register.MessageHook("TeX Jax - parse error",function (message) {
+	  alert("Math Processing Error: "+message[1]);
+	});
+</script>
+<script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+    
 
     
 
@@ -545,15 +570,11 @@ absorbing state (HALT) from unknown regions. Blue dots denote the support in the
 
 <p><img width="1063" alt="qwer" src="https://user-images.githubusercontent.com/76901622/130322264-122c7b01-7c44-4a27-98a5-8c7ef3af4926.png" /></p>
 
-<ol>
-  <li><strong>Learning the dynamics model</strong></li>
-</ol>
+<p>1.<strong>Learning the dynamics model</strong></p>
 
 <p>The first step involves using the offline dataset to learn an approximate dynamics model $\hat{P}(\cdot \mid s, a)$. Since the offline dataset may not span the entire state space, the learned model may not be globally accurate. Naïve MBRL approach that directly plans with the learned model may overestimate rewards in unfamiliar parts of the state space, resulting in a highly sub-optimal policy. We overcome this with the next step.</p>
 
-<ol>
-  <li><strong>Unknown state-action detector (USAD)</strong></li>
-</ol>
+<p>2.<strong>Unknown state-action detector (USAD)</strong></p>
 
 <p>Like hypothesis testing, partition known and unknown regions based on the accuracy of learned model as follows.</p>
 
@@ -566,27 +587,24 @@ absorbing state (HALT) from unknown regions. Blue dots denote the support in the
   <li>
     <p>Two factors contribute to USAD’s effectiveness</p>
 
-    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- data availability: having sufficient data points “close” to the query
-- quality of representations: certain representations, like those based on physics, can lead to better
-</code></pre></div>    </div>
+    <ul>
+      <li>data availability: having sufficient data points “close” to the query</li>
+      <li>quality of representations: certain representations, like those based on physics, can lead to better</li>
+    </ul>
 
     <p>generalization guarantees.</p>
   </li>
 </ul>
 
-<ol>
-  <li><strong>Construct Pessimistic MDP construction</strong></li>
-</ol>
+<p>3.<strong>Construct Pessimistic MDP construction</strong></p>
 
-<p>The $(\alpha, \kappa)$-pessimistic MDP is described by $\hat{\mathcal{M}}<em>{p}:=\left{S \cup H A L T, A, r</em>{p}, \hat{P}<em>{p}, \hat{\rho}</em>{0}, \gamma\right} .$ Here, $S$ and $A$ are states and actions in the MDP $\mathcal{M}$. HALT is an additional absorbing state we introduce into the state space of $\hat{\mathcal{M}}<em>{p}$. $\hat{\rho}</em>{0}$ is the initial state distribution learned from the dataset $\mathcal{D} \cdot \gamma$ is the discount factor (same as $\left.\mathcal{M}\right)$. The modified reward and transition dynamics are given by:</p>
+<p>The $(\alpha, \kappa)$-pessimistic MDP is described by $\hat{\mathcal{M}}<em>{p}:=\left{S \cup H A L T, A, r</em>{p}, \hat{P}<em>{p}, \hat{\rho}</em>{0}, \gamma\right}$ Here, $S$ and $A$ are states $\hat{\rho}_{0}$ is the initial state distribution learned from the dataset $\mathcal{D} \cdot \gamma$ is the discount factor. The modified reward and transition dynamics are given by:</p>
 
 <p><img width="844" alt="sghf" src="https://user-images.githubusercontent.com/76901622/130322351-56542f54-204e-4db8-b076-5ace4f852cb5.png" /></p>
 
 <p>$\delta\left(s^{\prime}=\mathrm{HALT}\right)$ is the Dirac delta function, which forces the MDP to transition to the absorbing state HALT. For unknown state-action pairs, use a reward of $-\kappa$, while all known state-actions receive the same reward as in the environment. The P-MDP heavily punishes policies that visit unknown states, thereby providing a safeguard against distribution shift and model exploitation.</p>
 
-<ol>
-  <li><strong>Planning</strong></li>
-</ol>
+<p>4.<strong>Planning</strong></p>
 
 <p>Perform planning in the P-MDP defined above. For simplicity, we assume a planning oracle that returns an $\epsilon_{\pi}$ -sub-optimal policy in the P-MDP. A number of algorithms based on MPC, search-based planning, dynamic programming, or policy optimization can be used to approximately realize this.</p>
 
@@ -719,14 +737,14 @@ environment.</p>
 
 <p>[2] T. Yu. MOPO: Model-based Offline Policy Optimization. 2020.</p>
 
-<p>[3] T. Yu. COMBO: Conservative Offline Model-Based Policy Optimization. 2021</p>
-
 
 
     <div class="blog-navigation">
         
-            <a class="prev" href="http://localhost:4000/offlineRL-Intro/">&laquo; Introduction of Offline Reinfoecement Learning</a>
+            <a class="prev" href="http://localhost:4000/Conservative-Offline-RL/">&laquo; Introduction of Offline Reinfoecement Learning</a>
         
+        
+            <a class="next" href="http://localhost:4000/Model-Free/">Model-Free Offline Reinfoecement Learning &raquo;</a>
         
     </div>
 
@@ -734,6 +752,25 @@ environment.</p>
 
     <div class="related">
     
+    
+        
+        
+            
+                
+                    
+                    <h4>Related Posts</h4>
+                    <ul>
+                    
+                    <li class="relatedPost">
+                        <a href="http://localhost:4000/Model-Free/">Model-Free Offline Reinfoecement Learning
+                        
+                        </a>
+                    </li>
+                    
+                    
+                
+            
+        
     
         
         
@@ -747,8 +784,21 @@ environment.</p>
             
                 
                     
-                    <h4>Related Posts</h4>
-                    <ul>
+                    <li class="relatedPost">
+                        <a href="http://localhost:4000/Conservative-Offline-RL/">Introduction of Offline Reinfoecement Learning
+                        
+                        </a>
+                    </li>
+                    
+                    
+                
+            
+        
+    
+        
+        
+            
+                
                     
                     <li class="relatedPost">
                         <a href="http://localhost:4000/offlineRL-Intro/">Introduction of Offline Reinfoecement Learning
@@ -765,9 +815,13 @@ environment.</p>
         
             
                 
+            
+        
+            
+                
                     
                     <li class="relatedPost">
-                        <a href="http://localhost:4000/offlineRL-Intro-1/">Introduction of Offline Reinfoecement Learning
+                        <a href="http://localhost:4000/COG/"> Optimal Execution via Reinforcement Learning
                         
                         </a>
                     </li>
