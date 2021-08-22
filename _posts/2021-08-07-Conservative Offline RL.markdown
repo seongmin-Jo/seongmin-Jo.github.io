@@ -1,7 +1,7 @@
 ---
 title: "Conservative Offline Reinfoecement Learning"
 layout: post
-date: 2021-06-21 22:44
+date: 2021-08-21 22:44
 image: /assets/images/[Markdowm Image.jpg
 headerImage: false
 tag:
