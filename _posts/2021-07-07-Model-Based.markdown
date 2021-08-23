@@ -6,14 +6,14 @@ image: /assets/images/[Markdowm Image.jpg
 headerImage: false
 use_math: true
 tag:
-- Reinforcement Learning
+  - Reinforcement Learning
 star: false
 category: blog
 author: joseongmin
 description: Model Based Offline Reinforment Learning
 ---
 
-# MOReL: Model-Based Offline Reinforcement Learning (2020) 
+# MOReL: Model-Based Offline Reinforcement Learning (2020)
 
 ## Goal
 
@@ -41,16 +41,15 @@ Like hypothesis testing, partition known and unknown regions based on the accura
 
 - Two factors contribute to USAD’s effectiveness
 
-    * data availability: having sufficient data points “close” to the query
-    * quality of representations: certain representations, like those based on physics, can lead to better
+      * data availability: having sufficient data points “close” to the query
+      * quality of representations: certain representations, like those based on physics, can lead to better
 
   generalization guarantees.
 
-3.**Construct Pessimistic MDP construction**
+  3.**Construct Pessimistic MDP construction**
 
-The $(\alpha, \kappa)$-pessimistic MDP is described by $\hat{\mathcal{M}}_{p}:=\left\{S \cup H A L T, A, r_{p}, \hat{P}_{p}, \hat{\rho}_{0}, \gamma\right\}$ Here, $S$ and $A$ are states $\hat{\rho}_{0}$ is the initial state distribution learned from the dataset $\mathcal{D} \cdot \gamma$ is the discount factor. The modified reward and transition dynamics are given by:
-
-<img width="844" alt="sghf" src="https://user-images.githubusercontent.com/76901622/130322351-56542f54-204e-4db8-b076-5ace4f852cb5.png">
+<img width="812" alt="dsfg" src="https://user-images.githubusercontent.com/76901622/130378135-9bc70188-d73c-4da4-bc86-cc3b0fb9584a.png">
+>
 
 $\delta\left(s^{\prime}=\mathrm{HALT}\right)$ is the Dirac delta function, which forces the MDP to transition to the absorbing state HALT. For unknown state-action pairs, use a reward of $-\kappa$, while all known state-actions receive the same reward as in the environment. The P-MDP heavily punishes policies that visit unknown states, thereby providing a safeguard against distribution shift and model exploitation.
 
@@ -85,7 +84,7 @@ Perform planning in the P-MDP defined above. For simplicity, we assume a plannin
 
 - But MOReL constructs terminating states based on a hard threshold on uncertainty.
 
-# MOPO: Model-based Offline Policy Optimization (2020) 
+# MOPO: Model-based Offline Policy Optimization (2020)
 
 ## Goal
 
